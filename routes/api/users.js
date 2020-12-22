@@ -66,11 +66,10 @@ router.post("/login", (req, res) => {
         if (isMatch) {
           // User matched
           // Create JWT Payload
-          //user.highScore = 10;
-          //user.save()
           const payload = {
             id: user.id,
-            name: user.name
+            name: user.name,
+            highScore: user.highScore
           };
   // Sign token
           jwt.sign(
@@ -109,15 +108,24 @@ router.post("/login", (req, res) => {
 
     });
 
-   User
+  /* User
     .findOne({})
     .sort('-highScore')  // give me the max
     .exec(function (err, user) {
-  
+  let res1 = JSON.stringify(user)
       return res
-            .json({ passwordincorrect: user.highScore});
+      .status(400)
+            .json({ passwordincorrect: res1});
   
-    });
+    });*/
+    User.find({}).sort('-highScore').limit(5).exec( 
+      function(err, user) {
+       
+        res.json({
+          topScores: user
+        });
+      }
+  );
    
   });
 

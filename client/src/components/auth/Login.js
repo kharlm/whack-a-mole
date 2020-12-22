@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { loginUser} from "../../actions/authActions";
+import { loginUser,updateHighScore} from "../../actions/authActions";
 import classnames from "classnames";
 class Login extends Component {
   constructor() {
@@ -42,7 +42,7 @@ const userData = {
     };
 
 this.props.loginUser(userData); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
-
+this.props.updateHighScore(userData)
   };
 render() {
     const { errors } = this.state;
@@ -129,5 +129,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { loginUser}
+  { loginUser,updateHighScore}
 )(Login);

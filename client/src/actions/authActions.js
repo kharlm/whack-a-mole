@@ -4,7 +4,7 @@ import jwt_decode from "jwt-decode";
 import {
   GET_ERRORS,
   SET_CURRENT_USER,
-  USER_LOADING
+  USER_LOADING,SET_TOP_SCORES
 } from "./types";
 import { decode } from "punycode";
 
@@ -25,8 +25,17 @@ export const updateHighScore = (userData) => dispatch => {
   axios
   .post("/api/users/updateScore", userData)
   .then((response) => {
-    
+    const {topScores} = response.data
+
+    let res2 = JSON.stringify(topScores[0])
+   // console.log("top: "+res2)
+    dispatch({
+      type: SET_TOP_SCORES,
+      payload: topScores
+    })
   })
+
+  
   };
 
 // Login - get user token
@@ -46,6 +55,12 @@ export const loginUser = userData => dispatch => {
       
       // Set current user
       dispatch(setCurrentUser(decoded));
+    /*  const {topScores} = res.data
+    dispatch({
+      type: SET_TOP_SCORES,
+      payload: topScores
+    })
+    */
     })
     .catch(err =>
       dispatch({
