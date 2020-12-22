@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { loginUser } from "../../actions/authActions";
+import { loginUser} from "../../actions/authActions";
 import classnames from "classnames";
 class Login extends Component {
   constructor() {
@@ -20,7 +20,7 @@ class Login extends Component {
       this.props.history.push("/dashboard");
     }
   }
-  
+
 componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push("/dashboard"); // push user to dashboard when they login
@@ -40,7 +40,9 @@ const userData = {
       email: this.state.email,
       password: this.state.password
     };
+
 this.props.loginUser(userData); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
+
   };
 render() {
     const { errors } = this.state;
@@ -127,5 +129,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { loginUser }
+  { loginUser}
 )(Login);

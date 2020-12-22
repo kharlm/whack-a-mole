@@ -66,6 +66,8 @@ router.post("/login", (req, res) => {
         if (isMatch) {
           // User matched
           // Create JWT Payload
+          //user.highScore = 10;
+          //user.save()
           const payload = {
             id: user.id,
             name: user.name
@@ -91,6 +93,32 @@ router.post("/login", (req, res) => {
         }
       });
     });
+  });
+
+  router.post("/updateScore", (req,res) => {
+
+  // Find user by email
+  
+  const email = req.body.email
+
+    User.findOne({email}).then(user => {
+      if(req.body.points>user.highScore){
+        user.highScore = req.body.points;
+          user.save()
+      }  
+
+    });
+
+   User
+    .findOne({})
+    .sort('-highScore')  // give me the max
+    .exec(function (err, user) {
+  
+      return res
+            .json({ passwordincorrect: user.highScore});
+  
+    });
+   
   });
 
   module.exports = router;

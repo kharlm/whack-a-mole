@@ -6,6 +6,8 @@ import {
   SET_CURRENT_USER,
   USER_LOADING
 } from "./types";
+import { decode } from "punycode";
+
 // Register User
 export const registerUser = (userData, history) => dispatch => {
   axios
@@ -18,6 +20,15 @@ export const registerUser = (userData, history) => dispatch => {
       })
     );
 };
+
+export const updateHighScore = (userData) => dispatch => {
+  axios
+  .post("/api/users/updateScore", userData)
+  .then((response) => {
+    
+  })
+  };
+
 // Login - get user token
 export const loginUser = userData => dispatch => {
   axios
@@ -31,6 +42,8 @@ export const loginUser = userData => dispatch => {
       setAuthToken(token);
       // Decode token to get user data
       const decoded = jwt_decode(token);
+      decoded.email = userData.email
+      
       // Set current user
       dispatch(setCurrentUser(decoded));
     })

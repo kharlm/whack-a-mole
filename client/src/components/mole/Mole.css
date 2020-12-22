@@ -3,16 +3,29 @@
     height: 130px;
     background-color:brown;
     border-radius: 50%;
-    border: 20px solid black;
+    border: 5px solid black;
     float: left;
     margin: 10px;
+    
+}
+
+.instruct {
+    height: 50px;
+    text-align: center;
+    font-family: monospace;
+    margin-bottom: 8rem;
+    color: red;
+    line-height: 1;
 }
 .dens {
-    display: flex;
+    display:flex;
     flex-flow: row wrap;
     justify-content: center;
     margin: auto;
     width: 550px;
     height: 560px;
+    background-image: url(./grass-texture.png);
+    background-repeat: repeat;
+    margin-bottom: 1rem;
 }
 
