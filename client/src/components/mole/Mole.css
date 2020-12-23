@@ -10,10 +10,10 @@
 }
 
 .instruct {
-    height: 50px;
+    height: 60px;
     text-align: center;
     font-family: monospace;
-    margin-bottom: 8rem;
+    margin-bottom: 9rem;
     color: red;
     line-height: 1;
 }

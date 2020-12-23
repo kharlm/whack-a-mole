@@ -15,7 +15,10 @@ class Home extends Component {
             gameOver: false,
             highScore: 0,
             showTopScores: false,
-            seconds: 30
+            seconds: 30000,
+            visibleTime: 2000, // used to set how often the moles appear
+            showDifficulty: false,
+            difficultyLevel:"Easy"
         };
     }
 
@@ -30,6 +33,11 @@ class Home extends Component {
         });
     }
 
+    _clearGameOver () {
+      this.setState({
+        gameOver: false
+    });
+    }
     _setHighScore(){
        
         let highScore = this.props.auth.user
@@ -65,7 +73,7 @@ class Home extends Component {
                 dens: this._getDensState()
             });
 
-        }, 1500)
+        }, this.state.visibleTime)
     }
 
     _getDensState () {
@@ -97,6 +105,40 @@ class Home extends Component {
     });
     }
 
+    setDifficulty (level) {
+      if(level==='easy'){
+        this.setState({
+          visibleTime: 2000,
+          difficultyLevel: "Easy",
+          showDifficulty: !this.state.showDifficulty
+      });
+      }
+
+      if(level==='medium'){
+        this.setState({
+          visibleTime: 1500,
+          difficultyLevel: "Medium",
+          showDifficulty: !this.state.showDifficulty
+      });
+      }
+
+      if(level==='hard'){
+        this.setState({
+          visibleTime: 1000,
+          difficultyLevel: "Hard",
+          showDifficulty: !this.state.showDifficulty
+      });
+      }
+      
+    }
+
+    _showDifficulty() {
+      console.log("inside")
+      this.setState({
+        showDifficulty: !this.state.showDifficulty
+    });
+    }
+
     render() {
         const { user } = this.props.auth;
         const { seconds } = this.state
@@ -105,8 +147,47 @@ class Home extends Component {
                 <Mole key={`mole-${index}`} isMoleVisible={this.state.dens[index].isMoleVisible} handleClick={this._MoleWhacked.bind(this)} />
             );
         });
-
-        if(this.state.showTopScores) { 
+console.log("Difficulty: "+this.state.showDifficulty)
+        if(this.state.showDifficulty) {
+          return(
+          <div className='instruct'>
+                    <button
+                  style={{
+                    width: "150px",
+                    borderRadius: "3px",
+                    letterSpacing: "1.5px",
+                  }}
+                  onClick={this.setDifficulty.bind(this,"easy")}
+                  className="btn btn-medium waves-effect waves-light hoverable green accent-3"
+                >
+                  Easy
+                </button>
+                <button
+                  style={{
+                    width: "150px",
+                    borderRadius: "3px",
+                    letterSpacing: "1.5px",
+                  }}
+                  onClick={this.setDifficulty.bind(this, "medium")}
+                  className="btn btn-medium waves-effect waves-light hoverable orange accent-3"
+                >
+                  Medium
+                </button>
+                <button
+                  style={{
+                    width: "150px",
+                    borderRadius: "3px",
+                    letterSpacing: "1.5px",
+                  }}
+                  onClick={this.setDifficulty.bind(this,"hard")}
+                  className="btn btn-medium waves-effect waves-light hoverable red accent-3"
+                >
+                  Hard
+                </button>
+                </div>
+          )
+        }
+        else if(this.state.showTopScores) { 
           //Absolutely terrible syntax but was stumped on time
           return(
                     <div className='instruct'>
@@ -133,7 +214,7 @@ class Home extends Component {
           )
         }
 
-        if(this.state.gameOver){
+        else if(this.state.gameOver){
             return (
                 <div>
                     <div className='instruct'>
@@ -146,10 +227,10 @@ class Home extends Component {
                     borderRadius: "3px",
                     letterSpacing: "1.5px",
                   }}
-                  onClick={this.onLogoutClick}
+                  onClick={this._clearGameOver.bind(this)}
                   className="btn btn-medium waves-effect waves-light hoverable blue accent-3"
                 >
-                  Logout
+                  Back
                 </button>
                 <button
                   style={{
@@ -177,10 +258,11 @@ class Home extends Component {
             
             <div>
                 <div className='instruct'>
-                <h4 style={{fontSize: 22}}>WHACK-A-MOLE!</h4>
-                <h4 style={{fontSize: 15}}>Seconds: {seconds}</h4>
-                <h5 style={{fontSize: 15}}>Points: {this.state.points}</h5>
-                <h6 style={{fontSize: 15}}>Your High Score is: {this.state.highScore}</h6>
+                <h4 style={{fontSize: 20}}>WHACK-A-MOLE!</h4>
+                <h4 style={{fontSize: 12}}>Seconds: {seconds}</h4>
+                <h4 style={{fontSize: 12}}>Difficulty Level: {this.state.difficultyLevel}</h4>
+                <h5 style={{fontSize: 12}}>Points: {this.state.points}</h5>
+                <h6 style={{fontSize: 12}}>Your High Score is: {this.state.highScore}</h6>
                 <button
               style={{
                 width: "150px",
@@ -213,6 +295,17 @@ class Home extends Component {
               className="btn btn-medium waves-effect waves-light hoverable blue accent-3"
             >
               Top Scores
+            </button>
+            <button
+              style={{
+                width: "150px",
+                borderRadius: "3px",
+                letterSpacing: "1.5px",
+              }}
+              onClick={this._showDifficulty.bind(this)}
+              className="btn btn-medium waves-effect waves-light hoverable blue accent-3"
+            >
+              Difficulty
             </button>
             </div>
                 <div className="dens">
