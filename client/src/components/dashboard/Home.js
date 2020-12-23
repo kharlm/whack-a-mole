@@ -16,6 +16,7 @@ class Home extends Component {
             highScore: 0,
             showTopScores: false,
             seconds: 30000,
+            countdown: 30,
             visibleTime: 2000, // used to set how often the moles appear
             showDifficulty: false,
             difficultyLevel:"Easy"
@@ -52,13 +53,21 @@ class Home extends Component {
     _startGame() {
         this.setState({
             gameOver: false,
-            points: 0
+            points: 0,
+            countdown: 30
         });
         var startTime = new Date().getTime();
+
+       var countdownInterval = setInterval(() => {
+          this.setState({
+            countdown: this.state.countdown - 1
+        });
+        },1000)
         
         var interval = setInterval(() => {
             if(new Date().getTime() - startTime > this.state.seconds){
                 clearInterval(interval);
+                clearInterval(countdownInterval);
                 this.setState({
                     dens: this._stopState(),
                     gameOver: true
@@ -103,6 +112,7 @@ class Home extends Component {
       this.setState({
         showTopScores: !this.state.showTopScores
     });
+    
     }
 
     setDifficulty (level) {
@@ -141,7 +151,7 @@ class Home extends Component {
 
     render() {
         const { user } = this.props.auth;
-        const { seconds } = this.state
+        const { countdown } = this.state
         const dens = this.state.dens.map((den,index) =>{
             return (
                 <Mole key={`mole-${index}`} isMoleVisible={this.state.dens[index].isMoleVisible} handleClick={this._MoleWhacked.bind(this)} />
@@ -188,6 +198,27 @@ console.log("Difficulty: "+this.state.showDifficulty)
           )
         }
         else if(this.state.showTopScores) { 
+          if(typeof this.props.auth.topScores[0]==='undefined'){
+            
+             this.props.logoutUser()
+            return(
+              <div className='instruct'>
+                <h4 style={{fontSize: 20}}>You were logged out when you refreshed the page please login again to view this page</h4>
+                <button
+              style={{
+                width: "150px",
+                borderRadius: "3px",
+                letterSpacing: "1.5px",
+              }}
+              onClick={this.onLogoutClick}
+              className="btn btn-medium waves-effect waves-light hoverable blue accent-3"
+            >
+              Logout
+            </button>
+                </div>
+            )
+          }
+          else{
           //Absolutely terrible syntax but was stumped on time
           return(
                     <div className='instruct'>
@@ -213,6 +244,7 @@ console.log("Difficulty: "+this.state.showDifficulty)
                     
           )
         }
+      }
 
         else if(this.state.gameOver){
             return (
@@ -259,7 +291,7 @@ console.log("Difficulty: "+this.state.showDifficulty)
             <div>
                 <div className='instruct'>
                 <h4 style={{fontSize: 20}}>WHACK-A-MOLE!</h4>
-                <h4 style={{fontSize: 12}}>Seconds: {seconds}</h4>
+                <h4 style={{fontSize: 12}}>Seconds: {countdown}</h4>
                 <h4 style={{fontSize: 12}}>Difficulty Level: {this.state.difficultyLevel}</h4>
                 <h5 style={{fontSize: 12}}>Points: {this.state.points}</h5>
                 <h6 style={{fontSize: 12}}>Your High Score is: {this.state.highScore}</h6>
