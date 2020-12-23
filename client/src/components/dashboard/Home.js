@@ -7,8 +7,10 @@ import Mole from '../mole/Mole.js';
 
 
 class Home extends Component {
+  
     constructor() {
         super();
+        
         this.state = {
             dens: this._stopState(),
             points: 0,
@@ -88,7 +90,8 @@ class Home extends Component {
     _getDensState () {
         return new Array(9).fill({}).map(()=>{
             return {
-                isMoleVisible: [true,false] [Math.round(Math.random())]
+                isMoleVisible: [true,false] [Math.round(Math.random())],
+                
             }
         });
     }
