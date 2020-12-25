@@ -108,16 +108,6 @@ router.post("/login", (req, res) => {
 
     });
 
-  /* User
-    .findOne({})
-    .sort('-highScore')  // give me the max
-    .exec(function (err, user) {
-  let res1 = JSON.stringify(user)
-      return res
-      .status(400)
-            .json({ passwordincorrect: res1});
-  
-    });*/
     User.find({}).sort('-highScore').limit(5).exec( 
       function(err, user) {
        

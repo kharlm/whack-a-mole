@@ -48,6 +48,8 @@ class Home extends Component {
         this.setState({
             highScore: this.state.points
         });
+
+        console.log("inside high score")
             highScore.points = this.state.points
             this.props.updateHighScore(highScore);
        }
@@ -112,9 +114,14 @@ class Home extends Component {
     }
 
     _clearTopScore () {
+      this.props.updateHighScore(this.props.auth.user);
       this.setState({
         showTopScores: !this.state.showTopScores
     });
+
+    
+     
+    
     
     }
 
@@ -160,7 +167,6 @@ class Home extends Component {
                 <Mole key={`mole-${index}`} isMoleVisible={this.state.dens[index].isMoleVisible} handleClick={this._MoleWhacked.bind(this)} />
             );
         });
-console.log("Difficulty: "+this.state.showDifficulty)
         if(this.state.showDifficulty) {
           return(
           <div className='instruct'>
